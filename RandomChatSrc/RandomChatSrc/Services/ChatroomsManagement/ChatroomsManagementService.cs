@@ -4,6 +4,9 @@
 
 namespace RandomChatSrc.Services.ChatroomsManagement
 {
+    using System.Net.Http;
+    using System.Net.Http.Json;
+    using System.Runtime.CompilerServices;
     using RandomChatSrc.Models;
 
     /// <summary>
@@ -11,106 +14,64 @@ namespace RandomChatSrc.Services.ChatroomsManagement
     /// </summary>
     public class ChatroomsManagementService : IChatroomsManagementService
     {
-        private string textChatsDirectoryPath;
+        private readonly HttpClient httpClient;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChatroomsManagementService"/> class.
-        /// </summary>
-        public ChatroomsManagementService(string filePath = "C:\\GitHub_Repos\\UBB-SE-2024-MACROW-SOFTERs\\RandomChatSrc\\RandomChatSrc\\ChatRepo\\")
+        public List<Chat> ActiveChats { get; private set; }
+
+        public ChatroomsManagementService(string baseAddress)
         {
-            this.ActiveChats = new List<Chat>();
-            this.textChatsDirectoryPath = filePath;
-            this.LoadActiveChats();
+            this.httpClient = new HttpClient { BaseAddress = new Uri(baseAddress) };
+            ActiveChats = new List<Chat>();
         }
 
-        private List<Chat> ActiveChats { get; set; }
+        public async void CreateAsync()
+        {
+            this.ActiveChats = await this.LoadActiveChatsAsync();
+        }
 
-        /// <summary>
-        /// Creates a new chatroom with a specified size.
-        /// </summary>
-        /// <param name="size">The size of the chatroom.</param>
-        /// <returns>The created chatroom.</returns>
         public Chat CreateChat()
         {
-            var newChat = new Chat(new List<Message>(), this.textChatsDirectoryPath);
-            this.ActiveChats.Add(newChat);
+            Chat newChat = new Chat(new List<Message>(), string.Empty); // Adjust constructor parameters as needed
+            ActiveChats.Add(newChat);
             return newChat;
         }
 
-        /// <summary>
-        /// Deletes a chatroom with the specified ID.
-        /// </summary>
-        /// <param name="id">The ID of the chatroom to delete.</param>
         public void DeleteChat(Guid id)
         {
-            foreach (Chat chat in this.ActiveChats.ToList())
-            {
-                if (chat.Id == id)
-                {
-                    this.ActiveChats.Remove(chat);
-                    return;
-                }
-            }
+            ActiveChats.RemoveAll(chat => chat.Id == id);
         }
 
-        /// <summary>
-        /// Retrieves a random chatroom from the active chatrooms list.
-        /// </summary>
-        /// <returns>A random chatroom.</returns>
         public Chat GetChat()
         {
             Random random = new Random();
-            int index = random.Next(this.ActiveChats.Count);
-            return this.ActiveChats[index];
+            int index = random.Next(ActiveChats.Count);
+            return ActiveChats[index];
         }
 
-        /// <summary>
-        /// Retrieves a chatroom by its ID.
-        /// </summary>
-        /// <param name="id">The ID of the chatroom.</param>
-        /// <returns>The chatroom with the specified ID.</returns>
         public Chat GetChatById(Guid id)
         {
-            Chat found = null;
-            foreach (Chat chat in this.ActiveChats)
-            {
-                if (chat.Id == id)
-                {
-                    found = chat;
-                    break;
-                }
-            }
-
-            return found;
+            return ActiveChats.FirstOrDefault(chat => chat.Id == id);
         }
 
-        /// <summary>
-        /// Retrieves all active chatrooms.
-        /// </summary>
-        /// <returns>A list of all active chatrooms.</returns>
         public List<Chat> GetAllChats()
         {
-            return this.ActiveChats;
+            return ActiveChats;
         }
 
-        private string GetIdFromPath(string folderPath)
+        private async Task<List<Chat>> LoadActiveChatsAsync()
         {
-            string id = string.Empty;
-            for (int i = folderPath.Length - 1; i >= 0 && folderPath[i] != '\\'; --i)
+            try
             {
-                id += folderPath[i];
+                var chats = await httpClient.GetFromJsonAsync<List<Chat>>("/api/Chat");
+                if (chats == null)
+                {
+                    throw new Exception("Chats list is empty");
+                }
+                return chats;
             }
-
-            return new string(id.Reverse().ToArray());
-        }
-
-        private void LoadActiveChats()
-        {
-            foreach (string chatFolderPath in Directory.GetDirectories(this.textChatsDirectoryPath))
+            catch (Exception ex)
             {
-                string foundId = this.GetIdFromPath(chatFolderPath);
-                Chat newChat = new Chat(new List<Message>(), this.textChatsDirectoryPath, foundId);
-                this.ActiveChats.Add(newChat);
+                throw new Exception("Error fetching chats", ex);
             }
         }
     }

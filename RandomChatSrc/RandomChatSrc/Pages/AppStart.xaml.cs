@@ -2,8 +2,6 @@ using RandomChatSrc.Services.ChatroomsManagement;
 using MauiApp1;
 using MauiApp1.ViewModel;
 using MauiApp1.Model;
-using System.Reflection;
-
 namespace RandomChatSrc.Pages;
 
 public partial class AppStart : ContentPage
@@ -13,10 +11,11 @@ public partial class AppStart : ContentPage
 		InitializeComponent();
 	}
 
-    private void RandomChats_Clicked(object sender, EventArgs e)
+    private async void RandomChats_Clicked(object sender, EventArgs e)
     {
-        ChatroomsManagementService cms = new ChatroomsManagementService();
-        this.Navigation.PushAsync(new OpenChatsWindow(cms));
+        ChatroomsManagementService cms = new ChatroomsManagementService("http://localhost:5086");
+        cms.CreateAsync();
+        await this.Navigation.PushAsync(new OpenChatsWindow(cms));
     }
 
     private void Chats_Clicked(object sender, EventArgs e)

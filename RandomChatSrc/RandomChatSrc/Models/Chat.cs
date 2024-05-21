@@ -31,6 +31,10 @@ namespace RandomChatSrc.Models
             this.LoadStoredMessages();
         }
 
+        public Chat(int id)
+        {
+            this.id = id;
+        }
         /// <summary>
         /// Gets the list of messages in the chat.
         /// </summary>
@@ -50,7 +54,9 @@ namespace RandomChatSrc.Models
         /// <summary>
         /// Gets or sets the unique identifier for the chat.
         /// </summary>
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public int id { get; set; }
+
+        public Guid Id { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Gets the list of participants in the chat.
