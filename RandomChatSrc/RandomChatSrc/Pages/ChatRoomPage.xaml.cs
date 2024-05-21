@@ -13,7 +13,7 @@ namespace RandomChatSrc.Pages
     /// </summary>
     public partial class ChatRoomPage : ContentPage
     {
-        private readonly Guid currentUserId;
+        private readonly User user;
         private IMessageService messageService;
 
         /// <summary>
@@ -21,10 +21,10 @@ namespace RandomChatSrc.Pages
         /// </summary>
         /// <param name="currentUser">The ID of the current user.</param>
         /// <param name="messageService">The service used to send and receive messages.</param>
-        public ChatRoomPage(Guid currentUser, IMessageService messageService)
+        public ChatRoomPage(User user, IMessageService messageService)
         {
             this.InitializeComponent();
-            this.currentUserId = currentUser;
+            this.user = user;
             this.messageService = messageService;
             this.LoadConversation();
         }
@@ -32,14 +32,15 @@ namespace RandomChatSrc.Pages
         /// <summary>
         /// Loads the conversation from the message service into the UI.
         /// </summary>
-        private void LoadConversation()
+        private async void LoadConversation()
         {
-            Chat textChat = this.messageService.GetChat();
+            Chat chat = this.messageService.GetChat();
+            List<Message> messages = await messageService.GetMessagesAsync();
             this.MessageContainer.Children.Clear();
             var chatHeaderLayout = new StackLayout { Orientation = StackOrientation.Horizontal, BackgroundColor = Color.FromArgb("#332769"), Padding = new Thickness(8) };
             var chatIdLabel = new Label
             {
-                Text = $"Chatroom: {textChat.Idd}",
+                Text = $"Chatroom: {chat.Id}",
                 HorizontalOptions = LayoutOptions.Center,
                 FontSize = 16,
                 FontAttributes = FontAttributes.Bold,
@@ -47,18 +48,18 @@ namespace RandomChatSrc.Pages
             chatHeaderLayout.Children.Add(chatIdLabel);
             this.MessageContainer.Children.Add(chatHeaderLayout);
 
-            foreach (Message message in textChat.Messages)
+            foreach (Message message in messages)
             {
                 var messageLabel = new Label
                 {
-                    Text = $"[{message.SentTime}] User {message.SenderId}: {message.Content}",
-                    HorizontalOptions = message.SenderId == this.currentUserId.ToString() ? LayoutOptions.End : LayoutOptions.Start,
+                    Text = $"[{message.SentTime}] User {message.UserId}: {message.Content}",
+                    HorizontalOptions = message.UserId == this.user.Id ? LayoutOptions.End : LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
-                    BackgroundColor = message.SenderId == this.currentUserId.ToString() ? Color.FromArgb("#ADD8E6") : Color.FromArgb("#CCCCCC"),
+                    BackgroundColor = message.UserId == this.user.Id ? Color.FromArgb("#ADD8E6") : Color.FromArgb("#CCCCCC"),
                     TextColor = Color.FromArgb("#000000"),
                     Padding = new Thickness(10),
                     Margin = new Thickness(10, 5, 10, 5),
-                    HorizontalTextAlignment = message.SenderId == this.currentUserId.ToString() ? TextAlignment.End : TextAlignment.Start,
+                    HorizontalTextAlignment = message.UserId == this.user.Id ? TextAlignment.End : TextAlignment.Start,
                     VerticalTextAlignment = TextAlignment.Center,
                 };
 
@@ -81,7 +82,7 @@ namespace RandomChatSrc.Pages
                 // Display the new message in the conversation UI
                 var messageLabel = new Label
                 {
-                    Text = $"[Now] User {this.currentUserId}: {messageText}",
+                    Text = $"[Now] User {this.user.Id}: {messageText}",
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Start,
                     BackgroundColor = Color.FromArgb("ADD8E6"),

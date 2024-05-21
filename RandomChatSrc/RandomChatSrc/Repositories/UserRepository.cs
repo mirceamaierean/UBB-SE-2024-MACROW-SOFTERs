@@ -27,7 +27,7 @@ namespace RandomChatSrc.Repositories
         /// </summary>
         /// <param name="id">The ID of the user to search for.</param>
         /// <returns>The user with the specified ID, if it's found.</returns>
-        public User GetUserById(Guid id)
+        public User GetUserById(int id)
         {
             return this.Users.FirstOrDefault(user => user.Id == id);
         }

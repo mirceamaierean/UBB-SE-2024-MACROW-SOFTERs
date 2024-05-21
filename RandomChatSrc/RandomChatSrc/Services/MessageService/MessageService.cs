@@ -4,6 +4,8 @@
 
 namespace RandomChatSrc.Services.MessageService
 {
+    using System.Net.Http;
+    using System.Net.Http.Json;
     using System;
     using RandomChatSrc.Models;
 
@@ -12,18 +14,20 @@ namespace RandomChatSrc.Services.MessageService
     /// </summary>
     public class MessageService : IMessageService
     {
-        private readonly Chat textChat;
-        private readonly Guid userId;
+        private readonly Chat chat;
+        private readonly User user;
+        private readonly HttpClient httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageService"/> class.
         /// </summary>
         /// <param name="textChat">The text chat to which messages will be sent.</param>
         /// <param name="userId">The ID of the user sending the messages.</param>
-        public MessageService(Chat textChat, Guid userId)
+        public MessageService(Chat chat, User user, string baseAddress)
         {
-            this.textChat = textChat;
-            this.userId = userId;
+            this.httpClient = new HttpClient { BaseAddress = new Uri(baseAddress) };
+            this.chat = chat;
+            this.user = user;
         }
 
         /// <summary>
@@ -32,7 +36,7 @@ namespace RandomChatSrc.Services.MessageService
         /// <param name="message">The message to send.</param>
         public void SendMessage(string message)
         {
-            this.textChat.AddMessage(this.userId.ToString(), message);
+            this.chat.AddMessage(this.user.Id.ToString(), message);
         }
 
         /// <summary>
@@ -41,7 +45,24 @@ namespace RandomChatSrc.Services.MessageService
         /// <returns>The text chat.</returns>
         public Chat GetChat()
         {
-            return this.textChat;
+            return this.chat;
+        }
+
+        public async Task<List<Message>> GetMessagesAsync()
+        {
+            try
+            {
+                var messages = await httpClient.GetFromJsonAsync<List<Message>>("/api/Chat/" + chat.Id + "/messages");
+                if (messages == null)
+                {
+                    throw new Exception("There are no messages in this chat.");
+                }
+                return messages;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching messages", ex);
+            }
         }
     }
 }

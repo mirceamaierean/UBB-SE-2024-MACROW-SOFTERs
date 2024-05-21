@@ -21,5 +21,7 @@ namespace RandomChatSrc.Services.MessageService
         /// </summary>
         /// <returns> The text chat.</returns>
         Chat GetChat();
+
+        Task<List<Message>> GetMessagesAsync();
     }
 }

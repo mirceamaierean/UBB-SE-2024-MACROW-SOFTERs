@@ -29,6 +29,7 @@ namespace RandomChatSrc.Pages
         public OpenChatsWindow(ChatroomsManagementService chatService)
         {
             this.chatService = chatService;
+            this.currentUser = new User(1, "alex");
             this.WidthRequest = 800;
             this.HeightRequest = 600;
             this.BackgroundColor = Color.FromArgb("#FFFFFF");
@@ -116,8 +117,8 @@ namespace RandomChatSrc.Pages
             if (sender is Chat selectedChat)
             {
                 // Open the chat page
-                MessageService messageService = new (selectedChat, this.currentUser.Id);
-                await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser.Id, messageService));
+                MessageService messageService = new (selectedChat, this.currentUser, "http://localhost:5086");
+                await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
             }
         }
 
@@ -131,8 +132,8 @@ namespace RandomChatSrc.Pages
             this.RefreshActiveChats();
             RandomMatchingService randomMatchingService = new (this.chatService, new UserChatListService(this.chatService));
             Chat textChat = randomMatchingService.RequestMatchingChatRoom(this.currentUser);
-            MessageService messageService = new (textChat, this.currentUser.Id);
-            await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser.Id, messageService));
+            MessageService messageService = new (textChat, this.currentUser, "http://localhost:5086");
+            await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
         }
 
         /// <summary>

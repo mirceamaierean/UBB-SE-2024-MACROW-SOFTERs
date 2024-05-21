@@ -16,16 +16,23 @@ namespace RandomChatSrc.Models
         /// <param name="interests">A list of the User's interests. If null, an empty list will be assigned.</param>
         public User(string name, List<Interest>? interests = null)
         {
-            this.Id = Guid.NewGuid();
+            this.Idd = Guid.NewGuid();
             this.Name = name;
             this.Interests = interests ?? new List<Interest>();
-            this.Location = new MapLocation(this.Id, 0, 0, "Null Location");
+            this.Location = new MapLocation(this.Idd, 0, 0, "Null Location");
+        }
+        public User(int id, string name)
+        {
+            this.Id = id;
+            this.Name = name;
         }
 
         /// <summary>
         /// Gets or sets the unique identifier for the User.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid Idd { get; set; }
+
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the User.
