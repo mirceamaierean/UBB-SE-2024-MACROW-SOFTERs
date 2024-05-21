@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System.Text.Json.Serialization;
+
 namespace RandomChatSrc.Models
 {
     /// <summary>
@@ -22,7 +24,7 @@ namespace RandomChatSrc.Models
         /// <param name="content">The content of the message.</param>
         public Message(Guid id, string senderId, string textChatFolderPath, string messagePath, DateTime sentTime, string content)
         {
-            this.Id = id;
+            this.Idd = id;
             this.SenderId = senderId;
             this.ChatFolderPath = textChatFolderPath;
             this.MessagePath = messagePath;
@@ -30,11 +32,24 @@ namespace RandomChatSrc.Models
             this.Content = content;
         }
 
+        [JsonConstructor]
+        public Message(int id, string content, int userId, int chatId, DateTime sentTime)
+        {
+            this.Id = id;
+            this.Content = content;
+            this.UserId = userId;
+            this.ChatId = chatId;
+            this.SentTime = sentTime;
+        }
+
         /// <summary>
         /// Gets the unique identifier of the message.
         /// </summary>
-        public Guid Id { get; }
+        public Guid Idd { get; }
 
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public int ChatId { get; set; }
         /// <summary>
         /// Gets the unique identifier of the sender.
         /// </summary>
@@ -53,7 +68,7 @@ namespace RandomChatSrc.Models
         /// <summary>
         /// Gets the time the message was sent.
         /// </summary>
-        public DateTime SentTime { get; }
+        public DateTime SentTime { get; set; }
 
         /// <summary>
         /// Gets the content of the message.

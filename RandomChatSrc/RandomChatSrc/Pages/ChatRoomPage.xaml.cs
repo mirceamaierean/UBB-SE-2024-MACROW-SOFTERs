@@ -39,7 +39,7 @@ namespace RandomChatSrc.Pages
             var chatHeaderLayout = new StackLayout { Orientation = StackOrientation.Horizontal, BackgroundColor = Color.FromArgb("#332769"), Padding = new Thickness(8) };
             var chatIdLabel = new Label
             {
-                Text = $"Chatroom: {textChat.Id}",
+                Text = $"Chatroom: {textChat.Idd}",
                 HorizontalOptions = LayoutOptions.Center,
                 FontSize = 16,
                 FontAttributes = FontAttributes.Bold,

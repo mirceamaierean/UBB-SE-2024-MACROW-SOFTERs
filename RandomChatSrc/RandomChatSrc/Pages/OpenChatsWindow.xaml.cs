@@ -60,14 +60,14 @@ namespace RandomChatSrc.Pages
         /// <summary>
         /// Refreshes the list of active chats displayed on the UI.
         /// </summary>
-        private void RefreshActiveChats()
+        private async void RefreshActiveChats()
         {
             // Clear the layout
             this.chatStackLayout.Children.Clear();
-
             // Parse the chats
             foreach (Chat chat in this.chatService.GetAllChats())
             {
+                List<Message> messages = await chatService.GetMessagesAsync(chat);
                 // Create a custom UI element for each chat
                 var chatLayout = new StackLayout
                 {
@@ -87,7 +87,7 @@ namespace RandomChatSrc.Pages
 
                 var lastMessageLabel = new Label
                 {
-                    Text = $"Last Message: {((chat.Messages.Count != 0) ? chat.Messages.Last().Content : "No messages yet")}",
+                    Text = $"Last Message: {((messages.Count != 0) ? messages.Last().Content : "No messages yet")}",
                     FontSize = 15,
                     TextColor = Color.FromArgb("#000000"),
                 };

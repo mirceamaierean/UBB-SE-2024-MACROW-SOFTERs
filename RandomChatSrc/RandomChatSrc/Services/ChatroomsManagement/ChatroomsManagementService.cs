@@ -21,10 +21,10 @@ namespace RandomChatSrc.Services.ChatroomsManagement
         public ChatroomsManagementService(string baseAddress)
         {
             this.httpClient = new HttpClient { BaseAddress = new Uri(baseAddress) };
-            ActiveChats = new List<Chat>();
+            this.ActiveChats = new List<Chat>();
         }
 
-        public async void CreateAsync()
+        public async Task CreateAsync()
         {
             this.ActiveChats = await this.LoadActiveChatsAsync();
         }
@@ -38,7 +38,7 @@ namespace RandomChatSrc.Services.ChatroomsManagement
 
         public void DeleteChat(Guid id)
         {
-            ActiveChats.RemoveAll(chat => chat.Id == id);
+            ActiveChats.RemoveAll(chat => chat.Idd == id);
         }
 
         public Chat GetChat()
@@ -50,7 +50,7 @@ namespace RandomChatSrc.Services.ChatroomsManagement
 
         public Chat GetChatById(Guid id)
         {
-            return ActiveChats.FirstOrDefault(chat => chat.Id == id);
+            return ActiveChats.FirstOrDefault(chat => chat.Idd == id);
         }
 
         public List<Chat> GetAllChats()
@@ -72,6 +72,23 @@ namespace RandomChatSrc.Services.ChatroomsManagement
             catch (Exception ex)
             {
                 throw new Exception("Error fetching chats", ex);
+            }
+        }
+
+        public async Task<List<Message>> GetMessagesAsync(Chat chat)
+        {
+            try
+            {
+                var messages = await httpClient.GetFromJsonAsync<List<Message>>("/api/Chat/" + chat.Id + "/messages");
+                if (messages == null)
+                {
+                    throw new Exception("There are no messages in this chat.");
+                }
+                return messages;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching messages", ex);
             }
         }
     }

@@ -4,6 +4,7 @@
 
 namespace RandomChatSrc.Models
 {
+    using System.Text.Json.Serialization;
     using System.Xml.Linq;
 
     /// <summary>
@@ -23,17 +24,18 @@ namespace RandomChatSrc.Models
         public Chat(List<Message> messages, string chatFolderPath, string oldId = "", int maximumParticipants = MAXPARTICIPANTS)
         {
             this.MaximumParticipants = maximumParticipants;
-            this.Id = string.IsNullOrEmpty(oldId) ? Guid.NewGuid() : new Guid(oldId);
+            this.Idd = string.IsNullOrEmpty(oldId) ? Guid.NewGuid() : new Guid(oldId);
             this.Messages = messages;
-            this.MessagesFolderPath = Path.Combine(chatFolderPath, this.Id.ToString());
+            this.MessagesFolderPath = Path.Combine(chatFolderPath, this.Idd.ToString());
 
             this.EnsureDirectoryExists(this.MessagesFolderPath);
             this.LoadStoredMessages();
         }
 
+        [JsonConstructor]
         public Chat(int id)
         {
-            this.id = id;
+            this.Id = id;
         }
         /// <summary>
         /// Gets the list of messages in the chat.
@@ -54,9 +56,9 @@ namespace RandomChatSrc.Models
         /// <summary>
         /// Gets or sets the unique identifier for the chat.
         /// </summary>
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        public Guid Id { get; set; } = Guid.Empty;
+        public Guid Idd { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Gets the list of participants in the chat.
