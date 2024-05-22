@@ -21,14 +21,13 @@ public partial class AppStart : ContentPage
 
     private void Chats_Clicked(object sender, EventArgs e)
     {
-        // // Get the current application
-        // var app = (MauiApp)Maui.MauiContext.GetRequiredService<IApplication>();
-        //
-        // // Get the Service and MainPageViewModel from the ServiceProvider
-        // var service = app.Services.GetRequiredService<Service>();
-        // var mainPageViewModel = app.Services.GetRequiredService<MainPageViewModel>();
-        //
-        // // Use the service and viewModel
-        // this.Navigation.PushAsync(new ChatAppMainPage(mainPageViewModel));
+        int userId = 1;
+        HttpClient httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri("http://localhost:5086/");
+        ApiService apiService = new ApiService(httpClient);
+
+        Service service = new Service(apiService);
+        MainPageViewModel mainPageViewModel = new MainPageViewModel(service, userId);
+        this.Navigation.PushAsync(new ChatAppMainPage(mainPageViewModel));
     }
 }

@@ -133,6 +133,7 @@ namespace MauiApp1.Model
 
         private List<Chat> SortChatsByLastMessageTime(List<Chat> chats)
         {
+            return chats;
             return chats.OrderByDescending(async chat => apiService.GetChatLastMessage(chat.Id).SentTime).ToList();
         }
 
