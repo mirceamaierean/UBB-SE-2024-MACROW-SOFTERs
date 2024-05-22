@@ -10,11 +10,11 @@ namespace MauiApp1.Model
 {
     public class Service : IService
     {
-        private IRepo apiService;
+        private IRepo httpRepo;
 
         public Service(IRepo apiService)
         {
-            this.apiService = apiService;
+            this.httpRepo = apiService;
         }
 
         public List<ChatSummary> GetUserChatSummaries(int userId, string participantName)
@@ -23,7 +23,7 @@ namespace MauiApp1.Model
             List<ChatSummary> result = new List<ChatSummary>();
 
             // Get all the user's chats and sort them based on the last message time.
-            List<Chat> chats = apiService.GetUserChats(userId);
+            List<Chat> chats = httpRepo.GetUserChats(userId);
             chats = SortChatsByLastMessageTime(chats);
 
             // Filter the chats based on the given name.
@@ -45,14 +45,14 @@ namespace MauiApp1.Model
         public ChatSummary GetChatSummary(int userId, int chatId)
         {
             // Get the chat by ID.
-            Chat chat = apiService.GetChat(chatId);
+            Chat chat = httpRepo.GetChat(chatId);
             if (chat == null)
             {
                 return null;
             }
 
             // Get a list of all the chat participants.
-            List<User> chatUsers = apiService.GetChatParticipants(chat.Id);
+            List<User> chatUsers = httpRepo.GetChatParticipants(chat.Id);
 
             // Remove the current user.
             chatUsers.RemoveAll(u => u.Id == userId);
@@ -64,7 +64,7 @@ namespace MauiApp1.Model
             string profilePhotoUrl = chatUsers.FirstOrDefault()?.ProfilePhotoUrl ?? string.Empty;
 
             // Get the last message.
-            Message lastChatMessage = apiService.GetChatLastMessage(chat.Id);
+            Message lastChatMessage = httpRepo.GetChatLastMessage(chat.Id);
             string messageContent = lastChatMessage.GetMessageContent();
 
             // Prepend "You: " if the current user is the sender.
@@ -94,7 +94,7 @@ namespace MauiApp1.Model
             List<MessageModel> result = new List<MessageModel>();
 
             // Get all the chat messages from the database.
-            List<TextMessage> messages = apiService.GetChatMessages(chatId);
+            List<TextMessage> messages = httpRepo.GetChatMessages(chatId);
             foreach (Message message in messages)
             {
                 if (message is Message)
@@ -119,7 +119,7 @@ namespace MauiApp1.Model
 
             foreach (Chat chat in chats)
             {
-                List<User> chatUsers = apiService.GetChatParticipants(chat.Id);
+                List<User> chatUsers = httpRepo.GetChatParticipants(chat.Id);
 
                 // Check if any participant's name matches the given participant name.
                 if (chatUsers.Any(user => user.Name.ToLower().Contains(participantName)))
@@ -134,12 +134,12 @@ namespace MauiApp1.Model
         private List<Chat> SortChatsByLastMessageTime(List<Chat> chats)
         {
             return chats;
-            return chats.OrderByDescending(async chat => apiService.GetChatLastMessage(chat.Id).SentTime).ToList();
+            return chats.OrderByDescending(async chat => httpRepo.GetChatLastMessage(chat.Id).SentTime).ToList();
         }
 
         public void AddTextMessageToChat(int chatId, int senderId, string text)
         {
-            apiService.AddMessageToChat(chatId, new TextMessage(0, chatId, senderId, DateTime.Now, string.Empty, text));
+            httpRepo.AddMessageToChat(chatId, new TextMessage(0, chatId, senderId, DateTime.Now, string.Empty, text));
         }
     }
 }
