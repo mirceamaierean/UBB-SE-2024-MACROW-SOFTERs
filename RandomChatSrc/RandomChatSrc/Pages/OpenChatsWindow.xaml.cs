@@ -26,15 +26,14 @@ namespace RandomChatSrc.Pages
         /// Initializes a new instance of the <see cref="OpenChatsWindow"/> class.
         /// </summary>
         /// <param name="chatService">The chat service instance.</param>
-        public OpenChatsWindow(ChatroomsManagementService chatService)
+        public OpenChatsWindow(ChatroomsManagementService chatService, User user)
         {
             this.chatService = chatService;
-            this.currentUser = new User(1, "hori273", string.Empty);
+            this.currentUser = user;
             this.WidthRequest = 800;
             this.HeightRequest = 600;
             this.BackgroundColor = Color.FromArgb("#FFFFFF");
             this.InitializeComponent();
-            this.RefreshActiveChats();
         }
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace RandomChatSrc.Pages
                 var chatInfoLayout = new StackLayout { VerticalOptions = LayoutOptions.Center, Margin = new Thickness(8) };
                 var chatIdLabel = new Label
                 {
-                    Text = $"Chat ID: {chat.Id}",
+                    Text = $"Chat: {chat.Name}",
                     FontSize = 18,
                     FontAttributes = FontAttributes.Bold,
                     TextColor = Color.FromArgb("#000000"),
@@ -148,6 +147,12 @@ namespace RandomChatSrc.Pages
         private async void MapButton_Clicked(object sender, EventArgs e)
         {
             await this.Navigation.PushAsync(new MapWindow(new MapService()));
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            this.RefreshActiveChats();
         }
     }
 }

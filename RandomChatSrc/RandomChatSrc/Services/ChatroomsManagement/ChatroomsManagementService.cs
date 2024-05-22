@@ -16,11 +16,12 @@ namespace RandomChatSrc.Services.ChatroomsManagement
     public class ChatroomsManagementService : IChatroomsManagementService
     {
         private readonly HttpClient httpClient;
-
+        private readonly User user;
         public List<Chat> ActiveChats { get; private set; }
 
-        public ChatroomsManagementService(string baseAddress)
+        public ChatroomsManagementService(User user, string baseAddress)
         {
+            this.user = user;
             this.httpClient = new HttpClient { BaseAddress = new Uri(baseAddress) };
             this.ActiveChats = new List<Chat>();
         }
@@ -92,6 +93,23 @@ namespace RandomChatSrc.Services.ChatroomsManagement
             catch (Exception ex)
             {
                 throw new Exception("Error fetching chats", ex);
+            }
+        }
+
+        public async Task<Message> GetLastMessageAsync(Chat chat)
+        {
+            try
+            {
+                var message = await httpClient.GetFromJsonAsync<Message>("/api/Chat/" + chat.Id + "/lastmessage");
+                if (message == null)
+                {
+                    throw new Exception("There are no messages in this chat.");
+                }
+                return message;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching message", ex);
             }
         }
 

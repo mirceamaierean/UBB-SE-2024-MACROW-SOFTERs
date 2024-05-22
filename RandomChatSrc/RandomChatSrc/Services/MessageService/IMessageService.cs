@@ -23,5 +23,7 @@ namespace RandomChatSrc.Services.MessageService
         Chat GetChat();
 
         Task<List<Message>> GetMessagesAsync();
+
+        Task<User> GetUserFromIdAsync(int userId);
     }
 }

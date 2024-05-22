@@ -50,9 +50,10 @@ namespace RandomChatSrc.Pages
 
             foreach (Message message in messages)
             {
+                User sender = await messageService.GetUserFromIdAsync(message.UserId);
                 var messageLabel = new Label
                 {
-                    Text = $"[{message.SentTime}] User {message.UserId}: {message.Content}",
+                    Text = $"[{message.SentTime}] {sender.Name}: {message.Content}",
                     HorizontalOptions = message.UserId == this.user.Id ? LayoutOptions.End : LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
                     BackgroundColor = message.UserId == this.user.Id ? Color.FromArgb("#ADD8E6") : Color.FromArgb("#CCCCCC"),
