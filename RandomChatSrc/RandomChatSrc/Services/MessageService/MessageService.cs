@@ -76,5 +76,22 @@ namespace RandomChatSrc.Services.MessageService
                 throw new Exception("Error fetching messages", ex);
             }
         }
+
+        public async Task<User> GetUserFromIdAsync(int userId)
+        {
+            try
+            {
+                var user = await httpClient.GetFromJsonAsync<User>("/api/User/" + userId);
+                if (user == null)
+                {
+                    throw new Exception("No user with this id was found.");
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching user", ex);
+            }
+        }
     }
 }

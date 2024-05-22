@@ -21,14 +21,16 @@ namespace RandomChatSrc.Models
         /// <param name="oldId">The ID of the chat, if it already exists.</param>
         /// <param name="maximumParticipants">The maximum number of participants allowed in the chat.</param>
         [JsonConstructor]
-        public Chat(int id)
+        public Chat(int id, string name)
         {
             this.Id = id;
+            this.Name = name;
         }
+
         /// <summary>
         /// Gets the list of messages in the chat.
         /// </summary>
-        
         public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

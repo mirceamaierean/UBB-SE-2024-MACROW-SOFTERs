@@ -13,9 +13,10 @@ public partial class AppStart : ContentPage
 
     private async void RandomChats_Clicked(object sender, EventArgs e)
     {
-        ChatroomsManagementService cms = new ChatroomsManagementService("http://localhost:5086");
+        Models.User testUser = new Models.User(1, "hori273", string.Empty);
+        ChatroomsManagementService cms = new ChatroomsManagementService(testUser, "http://localhost:5086");
         await cms.CreateAsync();
-        await this.Navigation.PushAsync(new OpenChatsWindow(cms));
+        await this.Navigation.PushAsync(new OpenChatsWindow(cms, testUser));
     }
 
     private void Chats_Clicked(object sender, EventArgs e)
