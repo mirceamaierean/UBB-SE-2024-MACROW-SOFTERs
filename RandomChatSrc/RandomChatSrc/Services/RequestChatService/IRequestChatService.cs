@@ -15,7 +15,9 @@ namespace RandomChatSrc.Services.RequestChatService
         /// Gets all chat requests.
         /// </summary>
         /// <returns>A list of all chat requests.</returns>
-        List<Request> GetAllRequests();
+        Task<List<Request>> GetAllRequests();
+        Task<List<Request>> GetSentRequestByUserAsync();
+        Task<List<Request>> GetReceivedRequestByUserAsync();
 
         /// <summary>
         /// Adds a new chat request from the sender to the receiver.

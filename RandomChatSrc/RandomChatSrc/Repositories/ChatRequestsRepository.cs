@@ -29,7 +29,7 @@ namespace RandomChatSrc.Repository
                 Directory.CreateDirectory(this.RequestsFolderPath);
             }
 
-            this.LoadFromMemory();
+            //this.LoadFromMemory();
         }
 
         public ChatRequestsRepository(List<Request> chatRequests, string requestsFolderPath, Guid id)
@@ -44,7 +44,7 @@ namespace RandomChatSrc.Repository
                 Console.WriteLine("directory doesnt exist");
             }
             Console.WriteLine(this.RequestsFolderPath);
-            this.LoadFromMemory();
+            //this.LoadFromMemory();
         }
 
         private Guid Id { get; set; }
@@ -56,7 +56,7 @@ namespace RandomChatSrc.Repository
         /// <summary>
         ///     Retrieves all Chat Requests from the XML file.
         /// </summary>
-        public void LoadFromMemory()
+        /*public void LoadFromMemory()
         {
             foreach (string requestPath in Directory.GetFiles(this.RequestsFolderPath))
             {
@@ -110,6 +110,6 @@ namespace RandomChatSrc.Repository
         ///     Retrieves all Chat Requests.
         /// </summary>
         /// <returns>A list of all Chat Requests.</returns>
-        public List<Request> GetAllChatRequests() => this.ChatRequests;
+        public List<Request> GetAllChatRequests() => this.ChatRequests;*/
     }
 }

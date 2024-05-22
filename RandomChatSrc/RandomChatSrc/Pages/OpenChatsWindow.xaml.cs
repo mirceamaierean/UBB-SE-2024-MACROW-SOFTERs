@@ -126,8 +126,10 @@ namespace RandomChatSrc.Pages
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event arguments.</param>
-        private void RequestsButton_Clicked(object sender, EventArgs e)
+        private async void RequestsButton_Clicked(object sender, EventArgs e)
         {
+            RequestChatService requestService = new RequestChatService(this.currentUser, this.chatService.GetHttpClient());
+            await this.Navigation.PushAsync(new RequestsPage(this.currentUser, requestService));
         }
 
         /// <summary>
