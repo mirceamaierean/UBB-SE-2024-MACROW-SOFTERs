@@ -29,45 +29,25 @@ namespace RandomChatSrc.Pages
         public OpenChatsWindow(ChatroomsManagementService chatService)
         {
             this.chatService = chatService;
+            this.currentUser = new User(1, "hori273", string.Empty);
             this.WidthRequest = 800;
             this.HeightRequest = 600;
             this.BackgroundColor = Color.FromArgb("#FFFFFF");
-
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "RepoMock", "CurrentUser.xml");
-            try
-            {
-                XmlDocument doc = new ();
-                doc.Load(filePath);
-                var currentNode = doc.SelectSingleNode("/Users/CurrentUser/Id");
-                if (currentNode != null)
-                {
-                    var userId = currentNode.InnerText ?? throw new Exception("User not found");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
             this.InitializeComponent();
             this.RefreshActiveChats();
-
-            User currentUser = new ("Current User");
-            this.currentUser = currentUser;
-            this.currentUser.AddInterest(new ("music"));
         }
 
         /// <summary>
         /// Refreshes the list of active chats displayed on the UI.
         /// </summary>
-        private void RefreshActiveChats()
+        private async void RefreshActiveChats()
         {
             // Clear the layout
             this.chatStackLayout.Children.Clear();
-
             // Parse the chats
             foreach (Chat chat in this.chatService.GetAllChats())
             {
+                List<Message> messages = await chatService.GetMessagesAsync(chat);
                 // Create a custom UI element for each chat
                 var chatLayout = new StackLayout
                 {
@@ -87,7 +67,7 @@ namespace RandomChatSrc.Pages
 
                 var lastMessageLabel = new Label
                 {
-                    Text = $"Last Message: {((chat.Messages.Count != 0) ? chat.Messages.Last().Content : "No messages yet")}",
+                    Text = $"Last Message: {((messages.Count != 0) ? messages.Last().Content : "No messages yet")}",
                     FontSize = 15,
                     TextColor = Color.FromArgb("#000000"),
                 };
@@ -116,8 +96,8 @@ namespace RandomChatSrc.Pages
             if (sender is Chat selectedChat)
             {
                 // Open the chat page
-                MessageService messageService = new (selectedChat, this.currentUser.Id);
-                await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser.Id, messageService));
+                MessageService messageService = new (selectedChat, this.currentUser, this.chatService.GetHttpClient());
+                await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
             }
         }
 
@@ -128,11 +108,9 @@ namespace RandomChatSrc.Pages
         /// <param name="e">The event arguments.</param>
         private async void RandomChatButton_Clicked(object sender, EventArgs e)
         {
-            this.RefreshActiveChats();
-            RandomMatchingService randomMatchingService = new (this.chatService, new UserChatListService(this.chatService));
-            Chat textChat = randomMatchingService.RequestMatchingChatRoom(this.currentUser);
-            MessageService messageService = new (textChat, this.currentUser.Id);
-            await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser.Id, messageService));
+            Chat selectedChat = this.chatService.GetRandomChat();
+            MessageService messageService = new (selectedChat, this.currentUser, this.chatService.GetHttpClient());
+            await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
         }
 
         /// <summary>

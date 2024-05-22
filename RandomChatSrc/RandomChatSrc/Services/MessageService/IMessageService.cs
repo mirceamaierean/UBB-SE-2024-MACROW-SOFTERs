@@ -14,12 +14,14 @@ namespace RandomChatSrc.Services.MessageService
         /// Sends a message.
         /// </summary>
         /// <param name="message">The message to send.</param>
-        void SendMessage(string message);
+        Task SendMessage(string message);
 
         /// <summary>
         /// Returns the text chat to which messages are sent.
         /// </summary>
         /// <returns> The text chat.</returns>
         Chat GetChat();
+
+        Task<List<Message>> GetMessagesAsync();
     }
 }

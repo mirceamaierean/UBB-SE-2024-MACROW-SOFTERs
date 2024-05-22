@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System.Text.Json.Serialization;
+
 namespace RandomChatSrc.Models
 {
     /// <summary>
@@ -20,40 +22,29 @@ namespace RandomChatSrc.Models
         /// <param name="messagePath">The path to the message.</param>
         /// <param name="sentTime">The time the message was sent.</param>
         /// <param name="content">The content of the message.</param>
-        public Message(Guid id, string senderId, string textChatFolderPath, string messagePath, DateTime sentTime, string content)
+
+        [JsonConstructor]
+        public Message(string content, int userId, int chatId, DateTime sentTime, string status)
         {
-            this.Id = id;
-            this.SenderId = senderId;
-            this.ChatFolderPath = textChatFolderPath;
-            this.MessagePath = messagePath;
-            this.SentTime = sentTime;
             this.Content = content;
+            this.UserId = userId;
+            this.ChatId = chatId;
+            this.SentTime = sentTime;
+            this.Status = status;
         }
 
         /// <summary>
         /// Gets the unique identifier of the message.
         /// </summary>
-        public Guid Id { get; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
 
-        /// <summary>
-        /// Gets the unique identifier of the sender.
-        /// </summary>
-        public string SenderId { get; }
-
-        /// <summary>
-        /// Gets the path to the text chat folder.
-        /// </summary>
-        public string ChatFolderPath { get; }
-
-        /// <summary>
-        /// Gets the path to the message.
-        /// </summary>
-        public string MessagePath { get; }
-
+        public int ChatId { get; set; }
+        public string Status { get; set; }
         /// <summary>
         /// Gets the time the message was sent.
         /// </summary>
-        public DateTime SentTime { get; }
+        public DateTime SentTime { get; set; }
 
         /// <summary>
         /// Gets the content of the message.

@@ -16,6 +16,6 @@ namespace RandomChatSrc.Repositories
         /// </summary>
         /// <param name="id">The ID of the user.</param>
         /// <returns>The user with the given ID.</returns>
-        public User GetUserById(Guid id);
+        public User GetUserById(int id);
     }
 }

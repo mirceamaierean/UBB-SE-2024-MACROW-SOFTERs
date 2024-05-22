@@ -4,6 +4,10 @@
 
 namespace RandomChatSrc.Services.ChatroomsManagement
 {
+    using System.Collections.Generic;
+    using System.Net.Http;
+    using System.Net.Http.Json;
+    using System.Runtime.CompilerServices;
     using RandomChatSrc.Models;
 
     /// <summary>
@@ -11,107 +15,106 @@ namespace RandomChatSrc.Services.ChatroomsManagement
     /// </summary>
     public class ChatroomsManagementService : IChatroomsManagementService
     {
-        private string textChatsDirectoryPath;
+        private readonly HttpClient httpClient;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChatroomsManagementService"/> class.
-        /// </summary>
-        public ChatroomsManagementService(string filePath = "C:\\GitHub_Repos\\UBB-SE-2024-MACROW-SOFTERs\\RandomChatSrc\\RandomChatSrc\\ChatRepo\\")
+        public List<Chat> ActiveChats { get; private set; }
+
+        public ChatroomsManagementService(string baseAddress)
         {
+            this.httpClient = new HttpClient { BaseAddress = new Uri(baseAddress) };
             this.ActiveChats = new List<Chat>();
-            this.textChatsDirectoryPath = filePath;
-            this.LoadActiveChats();
         }
 
-        private List<Chat> ActiveChats { get; set; }
-
-        /// <summary>
-        /// Creates a new chatroom with a specified size.
-        /// </summary>
-        /// <param name="size">The size of the chatroom.</param>
-        /// <returns>The created chatroom.</returns>
-        public Chat CreateChat()
+        public async Task CreateAsync()
         {
-            var newChat = new Chat(new List<Message>(), this.textChatsDirectoryPath);
-            this.ActiveChats.Add(newChat);
-            return newChat;
+            this.ActiveChats = await this.LoadActiveChatsAsync();
         }
 
-        /// <summary>
-        /// Deletes a chatroom with the specified ID.
-        /// </summary>
-        /// <param name="id">The ID of the chatroom to delete.</param>
+       /* public Chat CreateChat()
+        {
+            Chat newChat = new Chat(new List<Message>(), string.Empty); // Adjust constructor parameters as needed
+            ActiveChats.Add(newChat);
+            return newChat;
+        } */
+
         public void DeleteChat(Guid id)
         {
-            foreach (Chat chat in this.ActiveChats.ToList())
-            {
-                if (chat.Id == id)
-                {
-                    this.ActiveChats.Remove(chat);
-                    return;
-                }
-            }
+            // ActiveChats.RemoveAll(chat => chat.Idd == id);
         }
 
-        /// <summary>
-        /// Retrieves a random chatroom from the active chatrooms list.
-        /// </summary>
-        /// <returns>A random chatroom.</returns>
         public Chat GetChat()
         {
             Random random = new Random();
-            int index = random.Next(this.ActiveChats.Count);
-            return this.ActiveChats[index];
+            int index = random.Next(ActiveChats.Count);
+            return ActiveChats[index];
         }
 
-        /// <summary>
-        /// Retrieves a chatroom by its ID.
-        /// </summary>
-        /// <param name="id">The ID of the chatroom.</param>
-        /// <returns>The chatroom with the specified ID.</returns>
-        public Chat GetChatById(Guid id)
+        public async Task<Chat> GetChatByIdAsync(int id)
         {
-            Chat found = null;
-            foreach (Chat chat in this.ActiveChats)
+            try
             {
-                if (chat.Id == id)
+                var chat = await httpClient.GetFromJsonAsync<Chat>("/api/Chat/" + id);
+                if (chat == null)
                 {
-                    found = chat;
-                    break;
+                    throw new Exception("No chat was found.");
                 }
+                return chat;
             }
-
-            return found;
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching chat", ex);
+            }
         }
 
-        /// <summary>
-        /// Retrieves all active chatrooms.
-        /// </summary>
-        /// <returns>A list of all active chatrooms.</returns>
         public List<Chat> GetAllChats()
         {
-            return this.ActiveChats;
+            return ActiveChats;
         }
 
-        private string GetIdFromPath(string folderPath)
+        public Chat GetRandomChat()
         {
-            string id = string.Empty;
-            for (int i = folderPath.Length - 1; i >= 0 && folderPath[i] != '\\'; --i)
-            {
-                id += folderPath[i];
-            }
-
-            return new string(id.Reverse().ToArray());
+            Random rnd = new Random();
+            int r = rnd.Next(ActiveChats.Count);
+            return ActiveChats[r];
         }
 
-        private void LoadActiveChats()
+        private async Task<List<Chat>> LoadActiveChatsAsync()
         {
-            foreach (string chatFolderPath in Directory.GetDirectories(this.textChatsDirectoryPath))
+            try
             {
-                string foundId = this.GetIdFromPath(chatFolderPath);
-                Chat newChat = new Chat(new List<Message>(), this.textChatsDirectoryPath, foundId);
-                this.ActiveChats.Add(newChat);
+                var chats = await httpClient.GetFromJsonAsync<List<Chat>>("/api/Chat");
+                if (chats == null)
+                {
+                    throw new Exception("Chats list is empty");
+                }
+                return chats;
             }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching chats", ex);
+            }
+        }
+
+        public async Task<List<Message>> GetMessagesAsync(Chat chat)
+        {
+            try
+            {
+                var messages = await httpClient.GetFromJsonAsync<List<Message>>("/api/Chat/" + chat.Id + "/messages");
+                if (messages == null)
+                {
+                    throw new Exception("There are no messages in this chat.");
+                }
+                return messages;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching messages", ex);
+            }
+        }
+
+        public HttpClient GetHttpClient()
+        {
+            return httpClient;
         }
     }
 }

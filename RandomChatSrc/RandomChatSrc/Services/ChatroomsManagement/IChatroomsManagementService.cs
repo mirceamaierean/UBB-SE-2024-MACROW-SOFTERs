@@ -21,7 +21,7 @@ namespace RandomChatSrc.Services.ChatroomsManagement
         /// Creates a new chatroom with the existing chats.
         /// </summary>CreateChat
         /// <returns>The created chatroom.</returns>
-        Chat CreateChat();
+        // Chat CreateChat(); - needs API
 
         /// <summary>
         /// Deletes a chatroom with the specified ID.
@@ -34,7 +34,7 @@ namespace RandomChatSrc.Services.ChatroomsManagement
         /// </summary>
         /// <param name="id">The ID of the chatroom.</param>
         /// <returns>The chatroom with the specified ID.</returns>
-        Chat GetChatById(Guid id);
+        Task<Chat> GetChatByIdAsync(int id);
 
         /// <summary>
         /// Retrieves all active chatrooms.

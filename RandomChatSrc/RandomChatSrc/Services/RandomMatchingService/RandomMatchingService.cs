@@ -49,7 +49,7 @@ namespace RandomChatSrc.Services.RandomMatchingService
             // => for this chat, the score will simply be 2 + 1 + 2 = 5.
             int currentScore = -1, bestScore = -1;
 
-            foreach (var chat in allChats)
+            /*foreach (var chat in allChats)
             {
                 ++currentChatIndex;
 
@@ -69,10 +69,10 @@ namespace RandomChatSrc.Services.RandomMatchingService
                     bestChatIndexes = new List<int> { currentChatIndex };
                 }
             }
-
+            */
             int randomIndex = new Random().Next(bestChatIndexes.Count);
             int selectedChatIndex = bestChatIndexes[randomIndex];
-            allChats[selectedChatIndex].AddParticipant(user);
+            // allChats[selectedChatIndex].AddParticipant(user);
             return allChats[selectedChatIndex];
         }
     }
