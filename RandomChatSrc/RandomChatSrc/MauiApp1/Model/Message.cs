@@ -8,50 +8,21 @@ namespace MauiApp1.Model
 {
     public abstract class Message
     {
-        protected int messageId;
-        protected int chatId;
-        protected int senderId;
-        protected DateTime timestamp;
-        protected string status;
+        public int Id { get; set; }
+        public int ChatId { get; set; }
+        public int UserId { get; set; }
+        public DateTime SentTime { get; set; }
+        public string Status { get; set; }
 
-        public Message(int messageId, int chatId, int senderId, DateTime timestamp, string status)
+        public Message(int id, int chatId, int userId, DateTime sentTime, string status)
         {
-            this.messageId = messageId;
-            this.chatId = chatId;
-            this.senderId = senderId;
-            this.timestamp = timestamp;
-            this.status = status;
+            this.Id = id;
+            this.ChatId = chatId;
+            this.UserId = userId;
+            this.SentTime = sentTime;
+            this.Status = status;
         }
 
         public abstract string GetMessageContent();
-
-        public int GetMessageId()
-        {
-            return messageId;
-        }
-        public void SetMessageId(int messageId)
-        {
-            this.messageId = messageId;
-        }
-        public int GetChatId()
-        {
-            return chatId;
-        }
-        public int GetSenderId()
-        {
-            return senderId;
-        }
-        public DateTime GetTimestamp()
-        {
-            return timestamp;
-        }
-        public string GetStatus()
-        {
-            return status;
-        }
-        public void SetStatus(string status)
-        {
-            this.status = status;
-        }
     }
 }

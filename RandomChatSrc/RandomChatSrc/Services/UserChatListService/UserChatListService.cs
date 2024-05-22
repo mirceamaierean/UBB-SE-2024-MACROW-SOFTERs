@@ -19,7 +19,6 @@ namespace RandomChatSrc.Services.UserChatListService
         /// Initializes a new instance of the <see cref="UserChatListService"/> class.
         /// </summary>
         /// <param name="chatroomsManagementService">The service for managing chatrooms.</param>
-
         public UserChatListService(IChatroomsManagementService chatroomsManagementService, string fileName = @"/Users/mirceamaierean/UBB-SE-2024-MACROW-SOFTERs/RandomChatSrc/RandomChatSrc/RepoMock/CurrentUser.xml")
         {
             this.chatroomsManagementService = chatroomsManagementService;

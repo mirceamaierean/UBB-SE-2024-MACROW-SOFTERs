@@ -13,34 +13,34 @@ namespace MauiApp1.ViewModel
     public class ChatPageViewModel : INotifyPropertyChanged
     {
         private int userId;
-        private readonly IService service;
         private int chatId;
+        private readonly IService service;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private string contactName;
-        public string ContactName
+        private string chatTitle;
+        public string ChatTitle
         {
-            get => contactName;
+            get => chatTitle;
             private set
             {
-                if (contactName != value)
+                if (chatTitle != value)
                 {
-                    contactName = value;
+                    chatTitle = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string contactProfilePhotoPath;
-        public string ContactProfilePhotoPath
+        private string chatPictureUrl;
+        public string ChatPictureUrl
         {
-            get => contactProfilePhotoPath;
+            get => chatPictureUrl;
             private set
             {
-                if (value != contactProfilePhotoPath)
+                if (value != chatPictureUrl)
                 {
-                    contactProfilePhotoPath = value;
+                    chatPictureUrl = value;
                     OnPropertyChanged();
                 }
             }
@@ -55,22 +55,23 @@ namespace MauiApp1.ViewModel
             Messages = new ObservableCollection<MessageModel>();
         }
 
-        private void RefreshChatMessages()
+        public void SetChatId(int chatId) // This is called from the ChatPage whenever the chatId is changed there.
         {
-            List<MessageModel> messages = service.GetChatMessages(chatId);
+            this.chatId = chatId;
+            ChatTitle = service.GetChatSummary(userId, chatId).PaticipantsNames;
+            ChatPictureUrl = service.GetChatSummary(userId, chatId).PhotoUrl;
+            // ChatPictureUrl = @"https://ironvalley.netlify.app/LOGOIV.png";
+            RefreshChatMessages();
+        }
+
+        private void RefreshChatMessages() // Refresh the list with the messages based on the chat id.
+        {
+            // Clear the list with the old messages and add the ones from returned by the service.
             Messages.Clear();
-            foreach (MessageModel messageModel in messages)
+            foreach (MessageModel messageModel in service.GetChatMessageModels(chatId, userId))
             {
                 Messages.Add(messageModel);
             }
-        }
-
-        public void SetChatId(int chatId)
-        {
-            this.chatId = chatId;
-            ContactName = service.GetContactName(chatId);
-            ContactProfilePhotoPath = service.GetContactProfilePhotoPath(chatId);
-            RefreshChatMessages();
         }
 
         public void AddTextMessageToChat(string text)
