@@ -72,12 +72,12 @@ namespace RandomChatSrc.Pages
         /// </summary>
         /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void SendMessage_Clicked(object sender, EventArgs e)
+        private async void SendMessage_Clicked(object sender, EventArgs e)
         {
             string messageText = this.MessageEntry.Text.Trim();
             if (!string.IsNullOrEmpty(messageText))
             {
-                this.messageService.SendMessage(messageText);
+                await this.messageService.SendMessage(messageText);
 
                 // Display the new message in the conversation UI
                 var messageLabel = new Label

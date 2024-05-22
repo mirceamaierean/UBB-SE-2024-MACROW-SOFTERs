@@ -21,10 +21,11 @@ namespace RandomChatSrc.Models
             this.Interests = interests ?? new List<Interest>();
             this.Location = new MapLocation(this.Idd, 0, 0, "Null Location");
         }
-        public User(int id, string name)
+        public User(int id, string name, string profilePhotoUrl)
         {
             this.Id = id;
             this.Name = name;
+            this.ProfilePhotoUrl = profilePhotoUrl;
         }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace RandomChatSrc.Models
         /// Gets or sets the name of the User.
         /// </summary>
         public string Name { get; set; }
+        public string ProfilePhotoUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the list of interests of the User.

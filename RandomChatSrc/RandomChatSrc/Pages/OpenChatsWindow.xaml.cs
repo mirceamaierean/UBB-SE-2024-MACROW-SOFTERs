@@ -29,33 +29,12 @@ namespace RandomChatSrc.Pages
         public OpenChatsWindow(ChatroomsManagementService chatService)
         {
             this.chatService = chatService;
-            this.currentUser = new User(1, "alex");
+            this.currentUser = new User(1, "hori273", string.Empty);
             this.WidthRequest = 800;
             this.HeightRequest = 600;
             this.BackgroundColor = Color.FromArgb("#FFFFFF");
-
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "RepoMock", "CurrentUser.xml");
-            try
-            {
-                XmlDocument doc = new ();
-                doc.Load(filePath);
-                var currentNode = doc.SelectSingleNode("/Users/CurrentUser/Id");
-                if (currentNode != null)
-                {
-                    var userId = currentNode.InnerText ?? throw new Exception("User not found");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
             this.InitializeComponent();
             this.RefreshActiveChats();
-
-            User currentUser = new ("Current User");
-            this.currentUser = currentUser;
-            this.currentUser.AddInterest(new ("music"));
         }
 
         /// <summary>
@@ -117,7 +96,7 @@ namespace RandomChatSrc.Pages
             if (sender is Chat selectedChat)
             {
                 // Open the chat page
-                MessageService messageService = new (selectedChat, this.currentUser, "http://localhost:5086");
+                MessageService messageService = new (selectedChat, this.currentUser, this.chatService.GetHttpClient());
                 await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
             }
         }
@@ -132,7 +111,7 @@ namespace RandomChatSrc.Pages
             this.RefreshActiveChats();
             RandomMatchingService randomMatchingService = new (this.chatService, new UserChatListService(this.chatService));
             Chat textChat = randomMatchingService.RequestMatchingChatRoom(this.currentUser);
-            MessageService messageService = new (textChat, this.currentUser, "http://localhost:5086");
+            MessageService messageService = new (textChat, this.currentUser, this.chatService.GetHttpClient());
             await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
         }
 

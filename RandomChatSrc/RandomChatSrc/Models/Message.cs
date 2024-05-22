@@ -33,13 +33,13 @@ namespace RandomChatSrc.Models
         }
 
         [JsonConstructor]
-        public Message(int id, string content, int userId, int chatId, DateTime sentTime)
+        public Message(string content, int userId, int chatId, DateTime sentTime, string status)
         {
-            this.Id = id;
             this.Content = content;
             this.UserId = userId;
             this.ChatId = chatId;
             this.SentTime = sentTime;
+            this.Status = status;
         }
 
         /// <summary>
@@ -49,7 +49,9 @@ namespace RandomChatSrc.Models
 
         public int Id { get; set; }
         public int UserId { get; set; }
+
         public int ChatId { get; set; }
+        public string Status { get; set; }
         /// <summary>
         /// Gets the unique identifier of the sender.
         /// </summary>

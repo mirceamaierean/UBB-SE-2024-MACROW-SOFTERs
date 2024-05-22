@@ -23,20 +23,32 @@ namespace RandomChatSrc.Services.MessageService
         /// </summary>
         /// <param name="textChat">The text chat to which messages will be sent.</param>
         /// <param name="userId">The ID of the user sending the messages.</param>
-        public MessageService(Chat chat, User user, string baseAddress)
+        public MessageService(Chat chat, User user, HttpClient httpClient)
         {
-            this.httpClient = new HttpClient { BaseAddress = new Uri(baseAddress) };
+            this.httpClient = httpClient;
             this.chat = chat;
             this.user = user;
         }
 
         /// <summary>
-        /// Sends a message to the text chat.
+        /// Sends a message to the text chaSt.
         /// </summary>
         /// <param name="message">The message to send.</param>
-        public void SendMessage(string message)
+        public async Task SendMessage(string content)
         {
-            this.chat.AddMessage(this.user.Id.ToString(), message);
+            try
+            {
+                Message message = new Message(content, user.Id, chat.Id, DateTime.Now, string.Empty);
+                var sentMessage = await httpClient.PostAsJsonAsync("/api/Chat/" + chat.Id + "/addmessage", message);
+                if (sentMessage == null)
+                {
+                    throw new Exception("The message could not be sent.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error sending the message", ex);
+            }
         }
 
         /// <summary>

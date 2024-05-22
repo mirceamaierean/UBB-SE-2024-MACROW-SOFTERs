@@ -91,5 +91,10 @@ namespace RandomChatSrc.Services.ChatroomsManagement
                 throw new Exception("Error fetching messages", ex);
             }
         }
+
+        public HttpClient GetHttpClient()
+        {
+            return httpClient;
+        }
     }
 }
