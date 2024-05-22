@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RandomChatSrc.Pages.RequestsPage"
+             Title="Requests Page">
+
+    <Grid VerticalOptions="FillAndExpand">
+        <ScrollView>
+            <StackLayout x:Name="RequestsContainer" VerticalOptions="Start" Spacing="10" />
+        </ScrollView>
+        <Grid VerticalOptions="End">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Received Requests" Clicked="ReceivedRequests_Clicked" VerticalOptions="Center" Margin="10"
+                    Grid.Column="0" />
+
+            <Button Text="Sent Requests" Clicked="SentRequests_Clicked" VerticalOptions="Center" Margin="10"
+                    Grid.Column="1" />
+        </Grid>
+    </Grid>
+</ContentPage>

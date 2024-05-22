@@ -17,32 +17,17 @@ namespace RandomChatSrc.Models
         /// <param name="senderUserId">The unique identifier of the sender.</param>
         /// <param name="receiverUserId">The unique identifier of the receiver.</param>
         /// <param name="requestPath">The path to the request.</param>
-        public Request(Guid requestId, Guid senderUserId, Guid receiverUserId, string requestPath)
+        public Request(int senderId, int receiverId)
         {
-            this.RequestId = requestId;
-            this.SenderUserId = senderUserId;
-            this.ReceiverUserId = receiverUserId;
-            this.RequestPath = requestPath;
+            this.SenderId = senderId;
+            this.ReceiverId = receiverId;
         }
 
         /// <summary>
         /// Gets or sets the unique identifier of the request.
         /// </summary>
-        public Guid RequestId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier of the sender.
-        /// </summary>
-        public Guid SenderUserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier of the receiver.
-        /// </summary>
-        public Guid ReceiverUserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to the request.
-        /// </summary>
-        public string RequestPath { get; set; }
+        public int Id { get; set; }
+        public int SenderId { get; set; }
+        public int ReceiverId { get; set; }
     }
 }
