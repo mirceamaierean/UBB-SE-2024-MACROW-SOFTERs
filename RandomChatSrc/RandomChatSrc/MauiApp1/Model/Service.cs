@@ -10,9 +10,9 @@ namespace MauiApp1.Model
 {
     public class Service : IService
     {
-        private ApiService apiService;
+        private IRepo apiService;
 
-        public Service(ApiService apiService)
+        public Service(IRepo apiService)
         {
             this.apiService = apiService;
         }

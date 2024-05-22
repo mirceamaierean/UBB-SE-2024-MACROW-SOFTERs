@@ -9,21 +9,13 @@ using MauiApp1.ViewModel;
 
 namespace MauiApp1.Model
 {
-    public class ApiService
+    public class HttpRepository : IRepo
     {
         private readonly HttpClient httpClient;
 
-        public ApiService(HttpClient httpClient)
+        public HttpRepository(HttpClient httpClient)
         {
             this.httpClient = httpClient;
-            Test();
-        }
-
-        private async void Test()
-        {
-            var response = await httpClient.GetAsync($"api/chat/getAllMessagesExample");
-            response.EnsureSuccessStatusCode();
-            var messages = await response.Content.ReadFromJsonAsync<List<TextMessage>>();
         }
 
         public List<Chat> GetUserChats(int userId)

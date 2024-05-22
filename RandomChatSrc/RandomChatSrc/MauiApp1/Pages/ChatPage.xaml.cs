@@ -34,7 +34,7 @@ public partial class ChatPage : ContentPage
         int userId = 1;
         HttpClient httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5086/");
-        ApiService apiService = new ApiService(httpClient);
+        HttpRepository apiService = new HttpRepository(httpClient);
 
         Service service = new Service(apiService);
         MainPageViewModel mainPageViewModel = new MainPageViewModel(service, userId);
