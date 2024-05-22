@@ -22,7 +22,6 @@ namespace RandomChatSrc.Models
         /// <param name="messagePath">The path to the message.</param>
         /// <param name="sentTime">The time the message was sent.</param>
         /// <param name="content">The content of the message.</param>
-
         [JsonConstructor]
         public Message(string content, int userId, int chatId, DateTime sentTime, string status)
         {
@@ -41,6 +40,7 @@ namespace RandomChatSrc.Models
 
         public int ChatId { get; set; }
         public string Status { get; set; }
+
         /// <summary>
         /// Gets the time the message was sent.
         /// </summary>

@@ -33,11 +33,11 @@
                                 <Border Grid.Column="0" WidthRequest="60" HeightRequest="60"
                                         Stroke="Transparent" StrokeShape="RoundRectangle 30"
                                         Margin="0,0,15,0">
-                                    <Image Source="{Binding ContactProfilePhotoPath}" Aspect="AspectFill" />
+                                    <Image Source="{Binding PhotoUrl}" Aspect="AspectFill" />
                                 </Border>
                                 
                                 <VerticalStackLayout Grid.Column="1" Spacing="3">
-                                    <Label Text="{Binding ContactName}" FontAttributes="Bold" FontSize="22" />
+                                    <Label Text="{Binding PaticipantsNames}" FontAttributes="Bold" FontSize="22" />
                                     <Label Text="{Binding LastMessage}" FontSize="16">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding LastMessageStatus}" Value="New">

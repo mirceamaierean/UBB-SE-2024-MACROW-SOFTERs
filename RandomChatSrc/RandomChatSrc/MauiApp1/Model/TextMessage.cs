@@ -2,16 +2,16 @@
 {
     public class TextMessage : Message
     {
-        private readonly string text;
+        public string Content { get; set; }
 
-        public TextMessage(int messageId, int chatId, int senderId, DateTime timestamp, string status, string text) : base(messageId, chatId, senderId, timestamp, status)
+        public TextMessage(int id, int chatId, int userId, DateTime sentTime, string status, string content) : base(id, chatId, userId, sentTime, status)
         {
-            this.text = text;
+            this.Content = content;
         }
 
         public override string GetMessageContent()
         {
-            return text;
+            return Content;
         }
     }
 }

@@ -22,10 +22,11 @@ public partial class AppStart : ContentPage
     private void Chats_Clicked(object sender, EventArgs e)
     {
         int userId = 1;
-        string usersFilePath = "C:\\GitHub_Repos\\UBB-SE-2024-MACROW-SOFTERs\\RandomChatSrc\\RandomChatSrc\\MauiApp1\\Data\\users.xml";
-        string chatsFilePath = "C:\\GitHub_Repos\\UBB-SE-2024-MACROW-SOFTERs\\RandomChatSrc\\RandomChatSrc\\MauiApp1\\Data\\chats.xml";
-        IRepository repository = new UsersChatsRepository(usersFilePath, chatsFilePath);
-        Service service = new Service(repository);
+        HttpClient httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri("http://localhost:5086/");
+        ApiService apiService = new ApiService(httpClient);
+
+        Service service = new Service(apiService);
         MainPageViewModel mainPageViewModel = new MainPageViewModel(service, userId);
         this.Navigation.PushAsync(new ChatAppMainPage(mainPageViewModel));
     }

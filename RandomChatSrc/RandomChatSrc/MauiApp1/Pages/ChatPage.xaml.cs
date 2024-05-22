@@ -1,3 +1,4 @@
+using MauiApp1.Model;
 using MauiApp1.ViewModel;
 
 namespace MauiApp1;
@@ -27,8 +28,17 @@ public partial class ChatPage : ContentPage
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        string route = "///MainPage";
-        await Shell.Current.GoToAsync(route);
+        // string route = "///MainPage";
+        // await Shell.Current.GoToAsync(route);
+
+        int userId = 1;
+        HttpClient httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri("http://localhost:5086/");
+        ApiService apiService = new ApiService(httpClient);
+
+        Service service = new Service(apiService);
+        MainPageViewModel mainPageViewModel = new MainPageViewModel(service, userId);
+        this.Navigation.PushAsync(new ChatAppMainPage(mainPageViewModel));
     }
 
     private async void OnFileClicked(object sender, EventArgs e)

@@ -1,4 +1,6 @@
-﻿using MauiApp1.ViewModel;
+﻿using System.Collections.ObjectModel;
+using MauiApp1.Model;
+using MauiApp1.ViewModel;
 
 namespace MauiApp1
 {
@@ -9,6 +11,7 @@ namespace MauiApp1
         public ChatAppMainPage(MainPageViewModel viewModel)
         {
             InitializeComponent();
+
             this.viewModel = viewModel;
             this.BindingContext = viewModel;
         }
@@ -21,13 +24,22 @@ namespace MauiApp1
 
         private async void OnSelectionChanged(object sender, SelectionChangedEventArgs eventArguments)
         {
-            if (eventArguments.CurrentSelection.FirstOrDefault() is ContactLastMessage selectedContact)
+            if (eventArguments.CurrentSelection.FirstOrDefault() is ChatSummary selectedContact)
             {
                 // string route = $"///ChatPage?chatId={selectedContact.ChatId}";
-                // await Shell.Current.GoToAsync(route
+                // await Shell.Current.GoToAsync(route);
                 int userId = 1;
-                ChatPageViewModel chatPageViewModel = new ChatPageViewModel(viewModel.GetService(), userId);
-                await this.Navigation.PushAsync(new ChatPage(chatPageViewModel));
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri("http://localhost:5086/");
+                ApiService apiService = new ApiService(httpClient);
+
+                Service service = new Service(apiService);
+
+                ChatPageViewModel chatPageViewModel = new ChatPageViewModel(service, userId);
+                chatPageViewModel.SetChatId(selectedContact.ChatId);
+                ChatPage chatPage = new ChatPage(chatPageViewModel);
+                chatPage.ChatId = selectedContact.ChatId;
+                this.Navigation.PushAsync(chatPage);
                 ((CollectionView)sender).SelectedItem = null;
             }
         }
@@ -36,7 +48,7 @@ namespace MauiApp1
         {
             base.OnNavigatedTo(arguments);
 
-            viewModel.RefreshContacts(string.Empty);
+            viewModel.FilterContacts(string.Empty);
         }
     }
 }

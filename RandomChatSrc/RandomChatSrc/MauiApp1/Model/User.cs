@@ -11,15 +11,15 @@ namespace MauiApp1.Model
 {
     public class User
     {
-        public int UserId { get; }
+        public int Id { get; }
         public string Name { get; }
-        public string ProfilePhotoPath { get; }
+        public string ProfilePhotoUrl { get; }
 
-        public User(int userId, string name, string profilePhotoPath)
+        public User(int id, string name, string profilePhotoUrl)
         {
-            this.UserId = userId;
+            this.Id = id;
             this.Name = name;
-            this.ProfilePhotoPath = profilePhotoPath;
+            this.ProfilePhotoUrl = profilePhotoUrl;
         }
     }
 }
