@@ -4,6 +4,7 @@
 
 namespace RandomChatSrc.Services.ChatroomsManagement
 {
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Json;
     using System.Runtime.CompilerServices;
@@ -29,16 +30,16 @@ namespace RandomChatSrc.Services.ChatroomsManagement
             this.ActiveChats = await this.LoadActiveChatsAsync();
         }
 
-        public Chat CreateChat()
+       /* public Chat CreateChat()
         {
             Chat newChat = new Chat(new List<Message>(), string.Empty); // Adjust constructor parameters as needed
             ActiveChats.Add(newChat);
             return newChat;
-        }
+        } */
 
         public void DeleteChat(Guid id)
         {
-            ActiveChats.RemoveAll(chat => chat.Idd == id);
+            // ActiveChats.RemoveAll(chat => chat.Idd == id);
         }
 
         public Chat GetChat()
@@ -48,14 +49,33 @@ namespace RandomChatSrc.Services.ChatroomsManagement
             return ActiveChats[index];
         }
 
-        public Chat GetChatById(Guid id)
+        public async Task<Chat> GetChatByIdAsync(int id)
         {
-            return ActiveChats.FirstOrDefault(chat => chat.Idd == id);
+            try
+            {
+                var chat = await httpClient.GetFromJsonAsync<Chat>("/api/Chat/" + id);
+                if (chat == null)
+                {
+                    throw new Exception("No chat was found.");
+                }
+                return chat;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching chat", ex);
+            }
         }
 
         public List<Chat> GetAllChats()
         {
             return ActiveChats;
+        }
+
+        public Chat GetRandomChat()
+        {
+            Random rnd = new Random();
+            int r = rnd.Next(ActiveChats.Count);
+            return ActiveChats[r];
         }
 
         private async Task<List<Chat>> LoadActiveChatsAsync()

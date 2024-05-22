@@ -108,10 +108,8 @@ namespace RandomChatSrc.Pages
         /// <param name="e">The event arguments.</param>
         private async void RandomChatButton_Clicked(object sender, EventArgs e)
         {
-            this.RefreshActiveChats();
-            RandomMatchingService randomMatchingService = new (this.chatService, new UserChatListService(this.chatService));
-            Chat textChat = randomMatchingService.RequestMatchingChatRoom(this.currentUser);
-            MessageService messageService = new (textChat, this.currentUser, this.chatService.GetHttpClient());
+            Chat selectedChat = this.chatService.GetRandomChat();
+            MessageService messageService = new (selectedChat, this.currentUser, this.chatService.GetHttpClient());
             await this.Navigation.PushAsync(new ChatRoomPage(this.currentUser, messageService));
         }
 

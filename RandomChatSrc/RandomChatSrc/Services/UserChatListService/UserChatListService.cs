@@ -67,7 +67,7 @@ namespace RandomChatSrc.Services.UserChatListService
         public List<Chat> GetOpenChats()
         {
             List<Chat> openChats = this.chatroomsManagementService.GetAllChats();
-            openChats = openChats.Where(chat => chat.Participants.Any(user => user.Idd == this.currentUserId)).ToList();
+            // openChats = openChats.Where(chat => chat.Participants.Any(user => user.Idd == this.currentUserId)).ToList();
             return openChats;
         }
     }

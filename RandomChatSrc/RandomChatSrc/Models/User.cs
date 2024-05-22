@@ -14,13 +14,6 @@ namespace RandomChatSrc.Models
         /// </summary>
         /// <param name="name">The name of the User.</param>
         /// <param name="interests">A list of the User's interests. If null, an empty list will be assigned.</param>
-        public User(string name, List<Interest>? interests = null)
-        {
-            this.Idd = Guid.NewGuid();
-            this.Name = name;
-            this.Interests = interests ?? new List<Interest>();
-            this.Location = new MapLocation(this.Idd, 0, 0, "Null Location");
-        }
         public User(int id, string name, string profilePhotoUrl)
         {
             this.Id = id;
@@ -31,8 +24,6 @@ namespace RandomChatSrc.Models
         /// <summary>
         /// Gets or sets the unique identifier for the User.
         /// </summary>
-        public Guid Idd { get; set; }
-
         public int Id { get; set; }
 
         /// <summary>
@@ -40,21 +31,5 @@ namespace RandomChatSrc.Models
         /// </summary>
         public string Name { get; set; }
         public string ProfilePhotoUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of interests of the User.
-        /// </summary>
-        public List<Interest> Interests { get; set; }
-
-        /// <summary>
-        /// Adds a new interest to the User's list of interests.
-        /// </summary>
-        /// <param name="interest">The interest to add.</param>
-        public MapLocation Location { get; set; }
-
-        public void AddInterest(Interest interest)
-        {
-            this.Interests.Add(interest);
-        }
     }
 }
