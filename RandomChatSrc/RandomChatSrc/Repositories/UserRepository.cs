@@ -29,7 +29,7 @@ namespace RandomChatSrc.Repositories
         /// <returns>The user with the specified ID, if it's found.</returns>
         public User GetUserById(int id)
         {
-            return this.Users.FirstOrDefault(user => user.Id == id);
+            return this.Users.FirstOrDefault(user => user.Id == id.ToString());
         }
     }
 }

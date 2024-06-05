@@ -6,24 +6,32 @@ namespace RandomChatSrc.Pages;
 
 public partial class AppStart : ContentPage
 {
-	public AppStart()
-	{
-		InitializeComponent();
-	}
+    private readonly Models.User loggedInUser;
+    private Models.User user;
+
+    public AppStart(User user)
+    {
+        InitializeComponent();
+        loggedInUser = user;
+    }
+
+    public AppStart(Models.User user)
+    {
+        this.user = user;
+    }
 
     private async void RandomChats_Clicked(object sender, EventArgs e)
     {
-        Models.User testUser = new Models.User(1, "hori273", string.Empty);
-        ChatroomsManagementService cms = new ChatroomsManagementService(testUser, "http://localhost:5086");
+        ChatroomsManagementService cms = new ChatroomsManagementService(loggedInUser, "http://localhost:7076");
         await cms.CreateAsync();
-        await this.Navigation.PushAsync(new OpenChatsWindow(cms, testUser));
+        await this.Navigation.PushAsync(new OpenChatsWindow(cms, loggedInUser));
     }
 
     private void Chats_Clicked(object sender, EventArgs e)
     {
-        int userId = 1;
+        int userId = int.Parse(loggedInUser.Id);
         HttpClient httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri("http://localhost:5086/");
+        httpClient.BaseAddress = new Uri("http://localhost:7076/");
         ApiService apiService = new ApiService(httpClient);
 
         Service service = new Service(apiService);

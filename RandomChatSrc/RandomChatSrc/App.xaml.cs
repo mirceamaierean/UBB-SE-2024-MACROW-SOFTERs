@@ -20,7 +20,7 @@ namespace RandomChatSrc
         public App()
         {
             this.InitializeComponent();
-            this.MainPage = new NavigationPage(new AppStart());
+            this.MainPage = new NavigationPage(new LoginPage());
         }
     }
 }

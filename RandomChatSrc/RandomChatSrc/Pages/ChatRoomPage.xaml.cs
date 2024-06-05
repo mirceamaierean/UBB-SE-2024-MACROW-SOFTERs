@@ -54,13 +54,13 @@ namespace RandomChatSrc.Pages
                 var messageLabel = new Label
                 {
                     Text = $"[{message.SentTime}] {sender.Name}: {message.Content}",
-                    HorizontalOptions = message.UserId == this.user.Id ? LayoutOptions.End : LayoutOptions.Start,
+                    HorizontalOptions = message.UserId.ToString() == this.user.Id ? LayoutOptions.End : LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
-                    BackgroundColor = message.UserId == this.user.Id ? Color.FromArgb("#ADD8E6") : Color.FromArgb("#CCCCCC"),
+                    BackgroundColor = message.UserId.ToString() == this.user.Id ? Color.FromArgb("#ADD8E6") : Color.FromArgb("#CCCCCC"),
                     TextColor = Color.FromArgb("#000000"),
                     Padding = new Thickness(10),
                     Margin = new Thickness(10, 5, 10, 5),
-                    HorizontalTextAlignment = message.UserId == this.user.Id ? TextAlignment.End : TextAlignment.Start,
+                    HorizontalTextAlignment = message.UserId.ToString() == this.user.Id ? TextAlignment.End : TextAlignment.Start,
                     VerticalTextAlignment = TextAlignment.Center,
                 };
 

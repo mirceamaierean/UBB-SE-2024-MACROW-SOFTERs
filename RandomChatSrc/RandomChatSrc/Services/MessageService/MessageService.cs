@@ -38,7 +38,7 @@ namespace RandomChatSrc.Services.MessageService
         {
             try
             {
-                Message message = new Message(content, user.Id, chat.Id, DateTime.Now, string.Empty);
+                Message message = new Message(content, int.Parse(user.Id), chat.Id, DateTime.Now, string.Empty);
                 var sentMessage = await httpClient.PostAsJsonAsync("/api/Chat/" + chat.Id + "/addmessage", message);
                 if (sentMessage == null)
                 {

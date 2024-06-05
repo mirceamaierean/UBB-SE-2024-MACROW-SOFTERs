@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RandomChatSrc.Pages.LoginPage"
+             Title="LoginPage">
+    <VerticalStackLayout
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        Padding="20">
+        <Label 
+            Text="Welcome to Lorem Ipsum"
+            FontSize="24"
+            HorizontalOptions="Center" 
+            VerticalOptions="CenterAndExpand" />
+        <Entry
+            x:Name="UsernameEntry"
+            Placeholder="Username"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="CenterAndExpand"
+            Margin="0,20,0,0"/>
+        <Button
+            Text="Login"
+            HorizontalOptions="Center"
+            VerticalOptions="CenterAndExpand"
+            Clicked="OnLoginButtonClicked"
+            Margin="0,20,0,0"/>
+    </VerticalStackLayout>
+</ContentPage>

@@ -98,6 +98,9 @@
 	  <MauiXaml Update="Pages\ChatApp\ChatPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\MapWindow.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -141,6 +144,12 @@
 	  </Compile>
 	  <Compile Update="MauiApp1\Pages\ChatAppMainPage.xaml.cs">
 	    <DependentUpon>ChatAppMainPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\LoginPage.xaml.cs">
+	    <DependentUpon>LoginPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\AppStart.xaml.cs">
+	    <DependentUpon>AppStart.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\ChatApp\ChatAppMainPage.xaml.cs">
 	    <DependentUpon>ChatAppMainPage.xaml</DependentUpon>
